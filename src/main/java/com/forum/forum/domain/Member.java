@@ -16,6 +16,8 @@ public class Member {
     private Long id;
 
     private String name;
+
+    @Column(unique = true, length = 20)
     private String username;
     private String password;
 
