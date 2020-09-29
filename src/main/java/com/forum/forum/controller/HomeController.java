@@ -5,6 +5,10 @@ import com.forum.forum.dto.MemberDto;
 import com.forum.forum.service.MemberService;
 import com.forum.forum.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -27,10 +31,14 @@ public class HomeController {
     private final PostService postService;
 
     @GetMapping("/")
-    public String home(Model model, Principal principal) {
-        List<Post> posts = postService.findAllPosts();
+    public String home(Model model, Principal principal,
+                       @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Post> posts = postService.getPostsForPage(pageable);
+        int totalPages = posts.getTotalPages();
         String username = principal.getName();
-        model.addAttribute("posts", posts);
+
+        model.addAttribute("posts", posts.getContent());
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("user", username);
 
         return "home";

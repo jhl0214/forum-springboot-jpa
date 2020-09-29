@@ -38,6 +38,8 @@ public class MemberService implements UserDetailsService {
     }
 
     private void validateDuplicateMember(MemberDto memberDto) {
+        System.out.println("=================");
+        System.out.println(memberDto.getUsername());
         Member findMember = memberRepository.findByUserName(memberDto.getUsername());
         if (findMember != null) {
             throw new IllegalStateException("User already exists.");

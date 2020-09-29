@@ -47,8 +47,8 @@ class ForumApplicationTests {
 
 	@Test
 	public void testMemRepo() {
-		Member member = new Member("name", "username", "pw", "email");
-		Member member2 = new Member("name2", "username2", "pw", "email");
+		Member member = new Member("name", "username", "pw", "email", "ROLE_USER");
+		Member member2 = new Member("name2", "username2", "pw", "email", "ROLE_USER");
 		memRepo.save(member);
 		memRepo.save(member2);
 
@@ -66,9 +66,8 @@ class ForumApplicationTests {
 	}
 
 	@Test
-	@Rollback(false)
 	public void testPostRepo() {
-		Member member = new Member("name", "username", "pw", "email");
+		Member member = new Member("name", "username", "pw", "email", "ROLE_USER");
 		Post post = new Post("title", "a", "b", LocalDateTime.now(), LocalDateTime.now());
 		member.addPost(post);
 
@@ -78,7 +77,7 @@ class ForumApplicationTests {
 		em.flush();
 
 		// Find a post by post id
-		Post byId = postRepo.find(post.getId());
+		Post byId = postRepo.findById(post.getId()).get();
 
 		// Check if post is added
 		assertEquals(post, byId);
@@ -88,7 +87,7 @@ class ForumApplicationTests {
 		assertEquals(1, test.size());
 
 		em.remove(byId);
-		byId = postRepo.find(post.getId());
+		byId = postRepo.findById(post.getId()).orElse(null);
 
 		// Check if post is removed
 		assertEquals(null, byId);
@@ -97,7 +96,7 @@ class ForumApplicationTests {
 
 	@Test
 	public void testImgRepo() {
-		Member member = new Member("name", "username", "pw", "email");
+		Member member = new Member("name", "username", "pw", "email", "ROLE_USER");
 		Post post = new Post("title", "a", "b", LocalDateTime.now(), LocalDateTime.now());
 		member.addPost(post);
 		Image img = new Image("src");
@@ -129,9 +128,8 @@ class ForumApplicationTests {
 	}
 
 	@Test
-	@Rollback(false)
 	public void testPostService() {
-		Member member = new Member("name", "user", "pw", "email");
+		Member member = new Member("name", "user", "pw", "email", "ROLE_USER");
 
 		Post post = new Post("title", "a", "b", LocalDateTime.now(), LocalDateTime.now());
 
@@ -163,9 +161,8 @@ class ForumApplicationTests {
 	}
 
 	@Test
-	@Rollback(false)
 	public void testCommentRepo() {
-		Member member = new Member("name", "user", "pw", "email");
+		Member member = new Member("name", "user", "pw", "email", "ROLE_USER");
 
 		Post post = new Post("title", "a", "b", LocalDateTime.now(), LocalDateTime.now());
 

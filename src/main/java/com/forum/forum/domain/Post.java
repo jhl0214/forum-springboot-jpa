@@ -1,6 +1,7 @@
 package com.forum.forum.domain;
 
 import com.forum.forum.dto.PostDto;
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -38,6 +39,7 @@ public class Post {
 
     }
 
+    @Builder
     public Post(String title, String writer, String content, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
         this.title = title;
         this.writer = writer;
@@ -47,7 +49,7 @@ public class Post {
     }
 
     public void setMember(Member member) {
-        this.member =member;
+        this.member = member;
     }
 
     public void addImage(Image image) {

@@ -5,6 +5,10 @@ import com.forum.forum.domain.Post;
 import com.forum.forum.service.MemberService;
 import com.forum.forum.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +26,11 @@ public class PostController {
     private final MemberService memberService;
 
     @GetMapping("/myPosts")
-    private String myPosts(Model model, Principal principal) {
+    private String myPosts(Model model, Principal principal,
+                           @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         String username = principal.getName();
-        List<Post> posts = postService.findPostsByUserName(username);
+        Page<Post> posts = postService.getMyPostsForPage(username, pageable);
+
         model.addAttribute("posts", posts);
         model.addAttribute("user", username);
         return "myPosts";
