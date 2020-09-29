@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div>
+        <h1 style="text-align: center" th:text="'Welcome, ' + ${user} + '!'"></h1>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Username</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="post : ${posts}">
+                <td th:text="${post.id}"></td>
+                <td th:text="${post.title}"></td>
+                <td th:text="${post.writer}"></td>
+                <td th:text="${post.createdDateTime}"></td>
+                <td>
+                    <a th:href="'javascript:deletePost('+${post.id}+')'" class="btn btn-danger">DELETE</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+<script>
+    function deletePost(id) {
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "/deletePost/" + id);
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+</html>

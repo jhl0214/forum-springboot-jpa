@@ -12,8 +12,9 @@ public class MemberRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public void save(Member member) {
+    public Long save(Member member) {
         em.persist(member);
+        return member.getId();
     }
 
     public Member find(Long id) {
@@ -26,9 +27,18 @@ public class MemberRepository {
     }
 
     public Member findByUserName(String username) {
-        return em.createQuery("select m From Member m where m.username  = :username", Member.class)
+        List<Member> members = em.createQuery("select m From Member m where m.username  = :username", Member.class)
                 .setParameter("username", username)
-                .getSingleResult();
+                .getResultList();
+        return members.size() == 0 ? null : members.get(0);
+    }
+
+    public Member findByUserNameAndPassword(String username, String password) {
+        List<Member> members =  em.createQuery("select m From Member m where m.username  = :username and m.password = :password", Member.class)
+                .setParameter("username", username)
+                .setParameter("password", password)
+                .getResultList();
+        return members.size() == 0 ? null : members.get(0);
     }
 
 }
