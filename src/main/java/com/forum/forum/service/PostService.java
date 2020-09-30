@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +49,9 @@ public class PostService {
         Long postId = postRepository.save(post).getId();
 
         // If images are uploaded, save the images.
-        saveImages(postDTO, postId);
+        if (!postDTO.getImg1().isEmpty() || !postDTO.getImg2().isEmpty() || !postDTO.getImg3().isEmpty()) {
+            saveImages(postId, postDTO);
+        }
 
         return postId;
     }
@@ -58,9 +60,20 @@ public class PostService {
      * Update post
      */
     @Transactional
-    public void updatePost(Long postId, PostDTO postDto) {
+    public void updatePost(Long postId, PostDTO postDTO) {
         Post post = postRepository.findById(postId).get();
-        post.updatePost(postDto);
+
+        postDTO.setWriter(post.getWriter());
+        postDTO.setCreatedDateTime(post.getCreatedDateTime());
+        postDTO.setModifiedDateTime(LocalDateTime.now());
+
+        post.updatePost(postDTO);
+
+        if ((postDTO.getImg1() != null && !postDTO.getImg1().isEmpty()) ||
+                (postDTO.getImg2() != null && !postDTO.getImg2().isEmpty()) ||
+                (postDTO.getImg3() != null && !postDTO.getImg3().isEmpty())) {
+            saveImages(postId, postDTO);
+        }
     }
 
     /**
@@ -70,6 +83,9 @@ public class PostService {
     public void deletePost(Long postId) {
         Post post = postRepository.findById(postId).get();
         postRepository.delete(post);
+        for (Image img : post.getImages()) {
+            deleteImageInDirectory(img);
+        }
     }
 
     /**
@@ -102,7 +118,7 @@ public class PostService {
     }
 
     @Transactional
-    public List<Image> saveImages(PostDTO postDTO, Long postId) {
+    public List<Image> saveImages(Long postId, PostDTO postDTO) {
         List<Image> images = new ArrayList<>();
         Post post = postRepository.findById(postId).get();
 
@@ -119,26 +135,26 @@ public class PostService {
 
         try {
             // If files are uploaded from the user, save these images.
-            if (!img1.isEmpty()) {
+            if (img1 != null && !img1.isEmpty()) {
                 String imgName = baseImgName + img1.getOriginalFilename();
                 images.add(new Image(basePath + "\\" + imgName, imgName, img1.getOriginalFilename()));
                 File dest = new File(basePath + "\\" + imgName);
                 img1.transferTo(dest);
-                log.debug("IMAGE 1 SAVED.");
+                log.info("IMAGE 1 SAVED.");
             }
-            if (!img2.isEmpty()) {
+            if (img2 != null && !img2.isEmpty()) {
                 String imgName = baseImgName + img2.getOriginalFilename();
                 images.add(new Image(basePath + "\\" + imgName, imgName, img2.getOriginalFilename()));
                 File dest = new File(basePath + "\\" + imgName);
                 img2.transferTo(dest);
-                log.debug("IMAGE 2 SAVED.");
+                log.info("IMAGE 2 SAVED.");
             }
-            if (!img3.isEmpty()) {
+            if (img3 != null && !img3.isEmpty()) {
                 String imgName = baseImgName + img3.getOriginalFilename();
                 images.add(new Image(basePath + "\\" + imgName, imgName, img3.getOriginalFilename()));
                 File dest = new File(basePath + "\\" + imgName);
                 img3.transferTo(dest);
-                log.debug("IMAGE 3 SAVED.");
+                log.info("IMAGE 3 SAVED.");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -150,5 +166,21 @@ public class PostService {
         }
 
         return images;
+    }
+
+    private void deleteImageInDirectory(Image image) {
+        File img = new File(image.getSrc());
+        System.out.println("==========");
+        System.out.println(img.exists());
+        if (img.exists()) {
+            boolean deleted = img.delete();
+            System.out.println("===========");
+            System.out.println(deleted);
+            if (deleted) {
+                log.info(image.getImgName() + " DELETED SUCCESSFULLY.");
+            } else {
+                log.info("ERROR WHILE DELETING " + image.getImgName());
+            }
+        }
     }
 }

@@ -92,38 +92,38 @@ class ForumApplicationTests {
 
 	}
 
-	@Test
-	public void testImgRepo() {
-		Member member = new Member("name", "username", "pw", "email", "ROLE_USER");
-		Post post = new Post("title", "a", "b", LocalDateTime.now(), LocalDateTime.now());
-		member.addPost(post);
-		Image img = new Image("src");
-		post.addImage(img);
-
-		memRepo.save(member);
-		postRepo.save(post);
-
-		em.flush();
-
-		// find img by id
-		Image findImg = imgRepo.find(img.getId());
-		post.getImages().remove(img);
-		em.flush();
-		// find after removing image
-		Image findImg2 = imgRepo.find(img.getId());
-
-		Image img2 = new Image("src2");
-		post.addImage(img2);
-		post.addImage(new Image("src3"));
-		em.flush();
-
-		// check if img is added
-		assertEquals(img, findImg);
-		// check if img is deleted
-		assertEquals(null, findImg2);
-		// check if 2 imgs are added
-		assertEquals(2, imgRepo.findByPostId(post.getId()).size());
-	}
+//	@Test
+//	public void testImgRepo() {
+//		Member member = new Member("name", "username", "pw", "email", "ROLE_USER");
+//		Post post = new Post("title", "a", "b", LocalDateTime.now(), LocalDateTime.now());
+//		member.addPost(post);
+//		Image img = new Image("src");
+//		post.addImage(img);
+//
+//		memRepo.save(member);
+//		postRepo.save(post);
+//
+//		em.flush();
+//
+//		// find img by id
+//		Image findImg = imgRepo.find(img.getId());
+//		post.getImages().remove(img);
+//		em.flush();
+//		// find after removing image
+//		Image findImg2 = imgRepo.find(img.getId());
+//
+//		Image img2 = new Image("src2");
+//		post.addImage(img2);
+//		post.addImage(new Image("src3"));
+//		em.flush();
+//
+//		// check if img is added
+//		assertEquals(img, findImg);
+//		// check if img is deleted
+//		assertEquals(null, findImg2);
+//		// check if 2 imgs are added
+//		assertEquals(2, imgRepo.findByPostId(post.getId()).size());
+//	}
 
 	@Test
 	public void testPostService() {

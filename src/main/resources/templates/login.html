@@ -6,7 +6,6 @@
     </head>
     <body>
         <div class="container">
-            <div th:replace="fragments/bodyHeader :: bodyHeader" />
             <form action="/login" method="post">
                 <p class="alert alert-danger" th:if="${param.error}"
                    th:text="'Check username or password.'">Login Error</p>

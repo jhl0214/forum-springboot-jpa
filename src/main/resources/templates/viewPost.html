@@ -24,7 +24,11 @@
             </div>
 
             <div th:if="${post.images.size() > 0}">
-                <img class="img-fluid center-block" th:each="image : ${post.images}" th:src="@{/img/{imgName}(imgName = ${image.imgName})}" th:alt="${image.imgOriginalName}">
+                <img class="img-fluid center-block" th:each="image : ${post.images}" th:src="@{img/{imgName}(imgName = ${image.imgName})}" th:alt="${image.imgOriginalName}">
+            </div>
+
+            <div class="row justify-content-center">
+                <a class="btn btn-primary" th:href="@{/modifyPost(id=${post.id})}">Modify</a>
             </div>
 
             <div th:replace="fragments/footer :: footer" />

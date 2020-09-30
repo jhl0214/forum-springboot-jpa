@@ -73,6 +73,34 @@ public class PostController {
         return "redirect:/";
     }
 
+    @GetMapping("/modifyPost")
+    public String modifyPostForm(@RequestParam("id") Long postId, Model model) {
+        Post post = postService.findPostById(postId);
+
+        PostDTO postDTO = new PostDTO();
+        postDTO.setWriter(post.getWriter());
+        postDTO.setContent(post.getContent());
+        postDTO.setCreatedDateTime(post.getCreatedDateTime());
+        postDTO.setTitle(post.getTitle());
+
+        model.addAttribute("postDTO", postDTO);
+        model.addAttribute("numOfImagesForPost", post.getImages().size());
+
+        return "modifyPost";
+    }
+
+    @PostMapping("/modifyPost")
+    public String modifyPost(@RequestParam("id") Long postId, @Valid PostDTO postDTO,
+                             BindingResult result) {
+        if (result.hasErrors()) {
+            return "modifyPost";
+        }
+
+        postService.updatePost(postId, postDTO);
+
+        return "redirect:/viewPost?id=" + postId;
+    }
+
     @PostMapping("/deletePost/{postId}")
     public String deletePost(@PathVariable("postId") Long postId, Principal principal) {
         Member member = memberService.findByUserName(principal.getName());
