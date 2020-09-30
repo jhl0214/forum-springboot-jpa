@@ -1,6 +1,6 @@
 package com.forum.forum.domain;
 
-import com.forum.forum.dto.PostDto;
+import com.forum.forum.dto.PostDTO;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,8 +18,10 @@ public class Post {
     @Column(name = "POST_ID")
     private Long id;
 
+    @Column(length = 50)
     private String title;
     private String writer;
+    @Column(length = 300)
     private String content;
 
     private LocalDateTime createdDateTime;
@@ -66,7 +68,7 @@ public class Post {
         this.modifiedDateTime = modifiedDateTime;
     }
 
-    public void updatePost(PostDto postDto) {
+    public void updatePost(PostDTO postDto) {
         this.title = postDto.getTitle();
         this.writer = postDto.getWriter();
         this.content = postDto.getContent();

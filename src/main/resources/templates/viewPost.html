@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments/header :: header" />
+    <body>
+        <div class="container" th:object="${post}">
+            <div th:replace="fragments/bodyHeader :: bodyHeader" />
+
+            <h1 style="text-align: center" th:text="${post.title}"></h1>
+
+            <div class="form-group">
+                <label th:for="writer">Writer</label>
+                <input type="text" th:field="*{writer}" class="form-control" th:value="${post.writer}"
+                       disabled>
+            </div>
+            <div class="form-group">
+                <label th:for="createdDateTime">Created at:</label>
+                <input type="text" th:field="*{createdDateTime}" class="form-control" th:value="${#temporals.format(post.createdDateTime, 'MM-dd-yy HH:mm')}"
+                       disabled>
+            </div>
+            <div class="form-group">
+                <label th:for="content">Content</label>
+                <textarea style="resize:none" th:field="*{content}" class="form-control" th:value="${post.content}" rows="8" cols="40" readonly
+                       disabled />
+            </div>
+
+            <div th:replace="fragments/footer :: footer" />
+        </div> <!-- /container -->
+    </body>
+</html>

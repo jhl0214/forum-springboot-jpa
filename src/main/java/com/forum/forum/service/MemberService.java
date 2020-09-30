@@ -1,7 +1,7 @@
 package com.forum.forum.service;
 
 import com.forum.forum.domain.Member;
-import com.forum.forum.dto.MemberDto;
+import com.forum.forum.dto.MemberDTO;
 import com.forum.forum.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,24 +23,24 @@ public class MemberService implements UserDetailsService {
      * Join
      */
     @Transactional
-    public Long join(MemberDto memberDto) {
-        validateDuplicateMember(memberDto);
+    public Long join(MemberDTO memberDTO) {
+        validateDuplicateMember(memberDTO);
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        memberDto.setPassword(encoder.encode(memberDto.getPassword()));
+        memberDTO.setPassword(encoder.encode(memberDTO.getPassword()));
 
         return memberRepository.save(Member.builder()
-                .name(memberDto.getName())
-                .username(memberDto.getUsername())
-                .password(memberDto.getPassword())
-                .email(memberDto.getEmail())
-                .auth(memberDto.getAuth()).build());
+                .name(memberDTO.getName())
+                .username(memberDTO.getUsername())
+                .password(memberDTO.getPassword())
+                .email(memberDTO.getEmail())
+                .auth(memberDTO.getAuth()).build());
     }
 
-    private void validateDuplicateMember(MemberDto memberDto) {
+    private void validateDuplicateMember(MemberDTO memberDTO) {
         System.out.println("=================");
-        System.out.println(memberDto.getUsername());
-        Member findMember = memberRepository.findByUserName(memberDto.getUsername());
+        System.out.println(memberDTO.getUsername());
+        Member findMember = memberRepository.findByUserName(memberDTO.getUsername());
         if (findMember != null) {
             throw new IllegalStateException("User already exists.");
         }

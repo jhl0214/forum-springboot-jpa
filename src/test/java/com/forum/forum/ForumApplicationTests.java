@@ -4,19 +4,17 @@ import com.forum.forum.domain.Comment;
 import com.forum.forum.domain.Image;
 import com.forum.forum.domain.Member;
 import com.forum.forum.domain.Post;
-import com.forum.forum.dto.CommentDto;
-import com.forum.forum.dto.PostDto;
+import com.forum.forum.dto.CommentDTO;
+import com.forum.forum.dto.PostDTO;
 import com.forum.forum.repository.CommentRepository;
 import com.forum.forum.repository.ImageRepository;
 import com.forum.forum.repository.MemberRepository;
 import com.forum.forum.repository.PostRepository;
 import com.forum.forum.service.CommentService;
 import com.forum.forum.service.PostService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -135,7 +133,7 @@ class ForumApplicationTests {
 
 		member.addPost(post);
 
-		PostDto dto = new PostDto();
+		PostDTO dto = new PostDTO();
 		dto.setContent("bb");
 		dto.setTitle("title2");
 		dto.setWriter("aa");
@@ -186,7 +184,7 @@ class ForumApplicationTests {
 		List<Comment> all = comRepo.findAll();
 		assertEquals(2, all.size());
 
-		CommentDto dto = new CommentDto();
+		CommentDTO dto = new CommentDTO();
 		dto.setContent("update2");
 		dto.setWriter("writer");
 		dto.setModifiedDateTime(LocalDateTime.now());

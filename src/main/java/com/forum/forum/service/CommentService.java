@@ -1,7 +1,7 @@
 package com.forum.forum.service;
 
 import com.forum.forum.domain.Comment;
-import com.forum.forum.dto.CommentDto;
+import com.forum.forum.dto.CommentDTO;
 import com.forum.forum.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class CommentService {
      * Update comment
      */
     @Transactional
-    public void updateComment(Long commentId, CommentDto commentDto) {
+    public void updateComment(Long commentId, CommentDTO commentDto) {
         Comment comment = commentRepository.find(commentId);
         comment.updateComment(comment.getId(), commentDto);
     }

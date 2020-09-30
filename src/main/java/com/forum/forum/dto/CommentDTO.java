@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class CommentDto {
+public class CommentDTO {
 
     @NotEmpty
     private String writer;

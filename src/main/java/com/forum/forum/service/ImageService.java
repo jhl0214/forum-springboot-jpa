@@ -1,8 +1,6 @@
 package com.forum.forum.service;
 
-import com.forum.forum.domain.Comment;
 import com.forum.forum.domain.Image;
-import com.forum.forum.dto.CommentDto;
 import com.forum.forum.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

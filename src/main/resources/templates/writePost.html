@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments/header :: header" />
+    <body>
+        <div class="container">
+            <div th:replace="fragments/bodyHeader :: bodyHeader" />
+            <form th:object="${postDTO}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label th:for="Title">Title</label>
+                    <input type="text" th:field="*{title}" class="form-control"
+                           th:class="${#fields.hasErrors('title')} ? 'form-control has-error fieldError' : 'form-control'">
+                    <p th:if="${#fields.hasErrors('title')}"
+                       th:errors="*{title}">Can't be empty</p>
+                </div>
+                <div class="form-group">
+                    <label th:for="content">Content</label>
+                    <textarea style="resize:none" th:field="*{content}" class="form-control" rows="8" cols="40"
+                              th:class="${#fields.hasErrors('content')} ? 'form-control has-error' : 'form-control'"/>
+                    <p th:if="${#fields.hasErrors('content')}"
+                       th:errors="*{content}">Can't be empty or more than 300 characters.</p>
+                </div>
+                <div class="form-group">
+                    <label>Images</label>
+                    <input type="file" th:field="*{img1}" class="form-control-file">
+                    <input type="file" th:field="*{img2}" class="form-control-file">
+                    <input type="file" th:field="*{img3}" class="form-control-file">
+                </div>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+            <div th:replace="fragments/footer :: footer" />
+        </div> <!-- /container -->
+    </body>
+    <script>
+        // Check if uploaded file is an image
+        $("input[type=file]").change(function() {
+            if ($(this).val() != "") {
+                var ext = $(this).val().split(".").pop().toLowerCase();
+                if ($.inArray(ext, ["gif", "jpg", "jpeg", , "png"]) == -1) {
+                    alert("only gif, jpg, jpeg, png can be uploaded.");
+                    $(this).val("");
+                    return;
+                }
+                // Check file size limit 20MB
+                var fileSize = this.files[0].size;
+                var maxSize = 1024 * 1024 * 20;
+                if (fileSize > maxSize) {
+                    alert("Max file size is 20MB.");
+                    $(this).val("");
+                }
+            }
+        });
+    </script>
+</html>

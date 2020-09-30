@@ -14,6 +14,8 @@ public class Image {
     private Long id;
 
     private String src;
+    private String imgName;
+    private String imgOriginalName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "POST_ID")
@@ -22,8 +24,10 @@ public class Image {
     protected Image() {
     }
 
-    public Image(String src) {
+    public Image(String src, String imgName, String imgOriginalName) {
         this.src = src;
+        this.imgName = imgName;
+        this.imgOriginalName = imgOriginalName;
     }
 
     public void setPost(Post post) {

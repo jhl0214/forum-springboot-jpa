@@ -1,6 +1,6 @@
 package com.forum.forum.domain;
 
-import com.forum.forum.dto.CommentDto;
+import com.forum.forum.dto.CommentDTO;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -43,7 +43,7 @@ public class Comment {
         this.post = post;
     }
 
-    public void updateComment(Long commentId, CommentDto commentDto) {
+    public void updateComment(Long commentId, CommentDTO commentDto) {
         this.writer = commentDto.getWriter();
         this.content = commentDto.getContent();
         this.createdDateTime = commentDto.getCreatedDateTime();

@@ -18,7 +18,7 @@
             <tbody>
             <tr th:each="post : ${posts}">
                 <td th:text="${post.id}"></td>
-                <td th:text="${post.title}"></td>
+                <td><a th:href="@{/viewPost(id=${post.id})}" th:text="${post.title}"></a></td>
                 <td th:text="${post.writer}"></td>
                 <td th:text="${#temporals.format(post.createdDateTime, 'MM-dd-yy HH:mm')}"></td>
                 <td>
@@ -27,6 +27,39 @@
             </tr>
             </tbody>
         </table>
+        <!-- customers pagination -->
+        <nav aria-label="Pagination" th:if="${totalPages gt 0}">
+            <ul class="pagination justify-content-center font-weight-medium"
+                th:with="sequenceTo=${totalPages > (posts.number / 10 + 1) * 10 ? (posts.number / 10 + 1) * 10 : totalPages},
+                            sequenceFrom=${(posts.number / 10 + 1) * 10 - 9}">
+                <li class="page-item" th:classappend="${posts.number eq 0} ? 'disabled'">
+                    <a class="page-link svg-icon"
+                       th:href="@{/myPosts(page=${posts.number lt 2 ? 1 : posts.number})}"
+                       aria-label="Previous"
+                       title="Previous Page" rel="tooltip">
+                        <span aria-hidden="true" data-feather="chevrons-left" width="20" height="20">Prev</span>
+                    </a>
+                </li>
+                <li class="page-item" th:classappend="${i == posts.number + 1} ? 'active'"
+                    th:each="i : ${#numbers.sequence(sequenceFrom, sequenceTo, 1)}">
+                    <a class="page-link" th:href="@{/myPosts(page=${i})}" th:text="${i}"
+                       th:title="${'Page '+ i}"
+                       rel="tooltip"></a>
+                </li>
+                <li class="page-item disabled" th:if="${(posts.number / 10 + 1) * 10 < totalPages}">
+                    <a class="page-link svg-icon" href="#">
+                        <span data-feather="more-horizontal" width="20" height="20">...</span>
+                    </a>
+                </li>
+                <li class="page-item" th:classappend="${posts.number + 1 eq totalPages} ? 'disabled'">
+                    <a class="page-link svg-icon" th:href="@{/myPosts(page=${posts.number + 2})}"
+                       aria-label="Next"
+                       title="Next Page" rel="tooltip">
+                        <span aria-hidden="true" data-feather="chevrons-right" width="20" height="20">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
     <div th:replace="fragments/footer :: footer" />
 </div> <!-- /container -->

@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-public class MemberDto {
+public class MemberDTO {
 
     @NotEmpty(message = "Please enter your name.")
     private String name;

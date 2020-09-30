@@ -1,7 +1,7 @@
 package com.forum.forum.controller;
 
 import com.forum.forum.domain.Post;
-import com.forum.forum.dto.MemberDto;
+import com.forum.forum.dto.MemberDTO;
 import com.forum.forum.service.MemberService;
 import com.forum.forum.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,12 +31,12 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model, Principal principal,
-                       @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<Post> posts = postService.getPostsForPage(pageable);
+                       @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Post> posts = postService.getAllPostsForPage(pageable);
         int totalPages = posts.getTotalPages();
         String username = principal.getName();
 
-        model.addAttribute("posts", posts.getContent());
+        model.addAttribute("posts", posts);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("user", username);
 
@@ -45,24 +44,31 @@ public class HomeController {
     }
 
     @GetMapping("/join")
-    public String joinForm(Model model) {
-        model.addAttribute("memberDto", new MemberDto());
+    public String joinForm(Model model, Principal principal) {
+        if (principal != null) {
+            return "redirect:/";
+        }
+        model.addAttribute("memberDTO", new MemberDTO());
         return "join";
     }
 
     @PostMapping("/join")
-    public String join(@Valid MemberDto memberDto, BindingResult result) {
+    public String join(@Valid MemberDTO memberDTO, BindingResult result) {
         if (result.hasErrors()) {
             return "join";
         }
 
-        memberDto.setAuth("ROLE_USER");
-        memberService.join(memberDto);
+        memberDTO.setAuth("ROLE_USER");
+        memberService.join(memberDTO);
         return "redirect:/login";
     }
 
     @GetMapping("/login")
-    public String loginPage() {
+    public String loginPage(Principal principal) {
+        if (principal != null) {
+            return "redirect:/";
+        }
+
         return "login";
     }
 
