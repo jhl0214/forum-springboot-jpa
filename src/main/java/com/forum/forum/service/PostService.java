@@ -47,6 +47,8 @@ public class PostService {
         member.addPost(post);
 
         Long postId = postRepository.save(post).getId();
+
+        // If images are uploaded, save the images.
         saveImages(postDTO, postId);
 
         return postId;
@@ -105,12 +107,12 @@ public class PostService {
         Post post = postRepository.findById(postId).get();
 
         // New image name in format username-postId-#
-        String baseImgName = post.getMember().getUsername() + "-" + post.getId() + "-";
+        String baseImgName = post.getWriter() + "-" + post.getId() + "-";
 
         // Root path
         String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
         // Directory to save images to
-        String basePath = rootPath + "/Forum-Images";
+        String basePath = rootPath + "\\Java coding\\Spring\\forum-springboot-jpa\\src\\main\\resources\\static\\img";
 
         MultipartFile img1 = postDTO.getImg1();
         MultipartFile img2 = postDTO.getImg2();
@@ -119,20 +121,23 @@ public class PostService {
         try {
             // If files are uploaded from the user, save these images.
             if (!img1.isEmpty()) {
-                images.add(new Image(basePath + "/" + baseImgName + "1", baseImgName + "1", img1.getOriginalFilename()));
-                File dest = new File(basePath + "/" + baseImgName + "1");
+                String imgName = baseImgName + img1.getOriginalFilename();
+                images.add(new Image(basePath + "\\" + imgName, imgName, img1.getOriginalFilename()));
+                File dest = new File(basePath + "\\" + imgName);
                 img1.transferTo(dest);
                 log.debug("IMAGE 1 SAVED.");
             }
             if (!img2.isEmpty()) {
-                images.add(new Image(basePath + "/" + baseImgName + "2", baseImgName + "2", img1.getOriginalFilename()));
-                File dest = new File(basePath + "/" + baseImgName + "2");
+                String imgName = baseImgName + img2.getOriginalFilename();
+                images.add(new Image(basePath + "\\" + imgName, imgName, img2.getOriginalFilename()));
+                File dest = new File(basePath + "\\" + imgName);
                 img2.transferTo(dest);
                 log.debug("IMAGE 2 SAVED.");
             }
             if (!img3.isEmpty()) {
-                images.add(new Image(basePath + "/" + baseImgName + "3", baseImgName + "3", img1.getOriginalFilename()));
-                File dest = new File(basePath + "/" + baseImgName + "3");
+                String imgName = baseImgName + img3.getOriginalFilename();
+                images.add(new Image(basePath + "\\" + imgName, imgName, img3.getOriginalFilename()));
+                File dest = new File(basePath + "\\" + imgName);
                 img3.transferTo(dest);
                 log.debug("IMAGE 3 SAVED.");
             }

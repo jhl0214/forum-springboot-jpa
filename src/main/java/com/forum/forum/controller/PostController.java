@@ -58,7 +58,6 @@ public class PostController {
 
     @PostMapping("/writePost")
     public String addPost(@Valid PostDTO postDTO, BindingResult result, Principal principal) {
-        System.out.println(result.toString());
         if (result.hasErrors()) {
             return "writePost";
         }
