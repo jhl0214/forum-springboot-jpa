@@ -109,10 +109,9 @@ public class PostService {
         // New image name in format username-postId-#
         String baseImgName = post.getWriter() + "-" + post.getId() + "-";
 
-        // Root path
-        String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
         // Directory to save images to
-        String basePath = rootPath + "\\Java coding\\Spring\\forum-springboot-jpa\\src\\main\\resources\\static\\img";
+        File f = new File("src\\main\\resources\\static\\img");
+        String basePath = f.getAbsolutePath();
 
         MultipartFile img1 = postDTO.getImg1();
         MultipartFile img2 = postDTO.getImg2();

@@ -1,5 +1,6 @@
 package com.forum.forum.controller;
 
+import com.forum.forum.domain.Member;
 import com.forum.forum.domain.Post;
 import com.forum.forum.dto.MemberDTO;
 import com.forum.forum.service.MemberService;
@@ -14,6 +15,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -54,12 +56,19 @@ public class HomeController {
 
     @PostMapping("/join")
     public String join(@Valid MemberDTO memberDTO, BindingResult result) {
+        // Check if user already exists.
         if (result.hasErrors()) {
             return "join";
         }
 
         memberDTO.setAuth("ROLE_USER");
-        memberService.join(memberDTO);
+
+        try {
+            memberService.join(memberDTO);
+        } catch (IllegalStateException e) {
+            result.addError(new FieldError("memberDTO", "username", "User already exists."));
+            return "join";
+        }
         return "redirect:/login";
     }
 
