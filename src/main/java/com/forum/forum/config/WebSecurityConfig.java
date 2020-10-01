@@ -33,11 +33,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf()
-                .ignoringAntMatchers("/deletePost/**", "/writePost/**", "/modifyPost/**")
+                .ignoringAntMatchers("/deletePost/**", "/writePost/**", "/modifyPost/**", "/addComment", "/deleteComment")
             .and()
                 .authorizeRequests()
                 .antMatchers("/login*", "/join").permitAll() // Everyone can access
-                .antMatchers("/list", "/writePost/**", "/modifyPost/**", "/deletePost/**", "/viewPost/**", "/myPosts", "/").hasRole("USER") // Only user and admin
+                .antMatchers("/list", "/writePost/**", "/modifyPost/**", "/deletePost/**", "/viewPost/**", "/addComment", "/deleteComment", "/myPosts", "/").hasRole("USER") // Only user and admin
                 .antMatchers("/admin").hasRole("ADMIN") // Only admin
                 .anyRequest().authenticated()
             .and()

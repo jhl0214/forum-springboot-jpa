@@ -126,7 +126,11 @@ public class PostService {
         String baseImgName = post.getWriter() + "-" + post.getId() + "-";
 
         // Directory to save images to
-        File f = new File("src\\main\\resources\\static\\img");
+        File f = new File(System.getProperty("user.home") + "\\forumImages");
+        if (!f.exists()) {
+            f.mkdir();
+        }
+
         String basePath = f.getAbsolutePath();
 
         MultipartFile img1 = postDTO.getImg1();
@@ -170,12 +174,9 @@ public class PostService {
 
     private void deleteImageInDirectory(Image image) {
         File img = new File(image.getSrc());
-        System.out.println("==========");
-        System.out.println(img.exists());
+
         if (img.exists()) {
             boolean deleted = img.delete();
-            System.out.println("===========");
-            System.out.println(deleted);
             if (deleted) {
                 log.info(image.getImgName() + " DELETED SUCCESSFULLY.");
             } else {

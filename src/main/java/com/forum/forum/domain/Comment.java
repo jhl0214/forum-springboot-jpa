@@ -1,6 +1,7 @@
 package com.forum.forum.domain;
 
 import com.forum.forum.dto.CommentDTO;
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ public class Comment {
     private Long id;
 
     private String writer;
+    @Column(length = 200)
     private String content;
     private LocalDateTime createdDateTime;
     private LocalDateTime modifiedDateTime;
@@ -28,6 +30,7 @@ public class Comment {
 
     }
 
+    @Builder
     public Comment(String writer, String content, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
         this.writer = writer;
         this.content = content;

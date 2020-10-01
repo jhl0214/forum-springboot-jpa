@@ -125,38 +125,38 @@ class ForumApplicationTests {
 //		assertEquals(2, imgRepo.findByPostId(post.getId()).size());
 //	}
 
-	@Test
-	public void testPostService() {
-		Member member = new Member("name", "user", "pw", "email", "ROLE_USER");
-
-		Post post = new Post("title", "a", "b", LocalDateTime.now(), LocalDateTime.now());
-
-		member.addPost(post);
-
-		PostDTO dto = new PostDTO();
-		dto.setContent("bb");
-		dto.setTitle("title2");
-		dto.setWriter("aa");
-		dto.setCreatedDateTime(LocalDateTime.now());
-		dto.setModifiedDateTime(LocalDateTime.now());
-
-		memRepo.save(member);
-		postService.addPost(post);
-		em.flush();
-		em.clear();
-
-		Post post2 = postService.findPostById(post.getId());
-		System.out.println("=======================");
-		System.out.println(post2.getTitle());
-
-		postService.updatePost(post.getId(), dto);
-		em.flush();
-		em.clear();
-
-		Post post3 = postService.findPostById(post.getId());
-		System.out.println("=======================");
-		System.out.println(post2.getTitle());
-	}
+//	@Test
+//	public void testPostService() {
+//		Member member = new Member("name", "user", "pw", "email", "ROLE_USER");
+//
+//		Post post = new Post("title", "a", "b", LocalDateTime.now(), LocalDateTime.now());
+//
+//		member.addPost(post);
+//
+//		PostDTO dto = new PostDTO();
+//		dto.setContent("bb");
+//		dto.setTitle("title2");
+//		dto.setWriter("aa");
+//		dto.setCreatedDateTime(LocalDateTime.now());
+//		dto.setModifiedDateTime(LocalDateTime.now());
+//
+//		memRepo.save(member);
+//		postService.addPost(post);
+//		em.flush();
+//		em.clear();
+//
+//		Post post2 = postService.findPostById(post.getId());
+//		System.out.println("=======================");
+//		System.out.println(post2.getTitle());
+//
+//		postService.updatePost(post.getId(), dto);
+//		em.flush();
+//		em.clear();
+//
+//		Post post3 = postService.findPostById(post.getId());
+//		System.out.println("=======================");
+//		System.out.println(post2.getTitle());
+//	}
 
 	@Test
 	public void testCommentRepo() {

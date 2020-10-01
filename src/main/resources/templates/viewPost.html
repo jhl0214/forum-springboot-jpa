@@ -27,11 +27,58 @@
                 <img class="img-fluid center-block" th:each="image : ${post.images}" th:src="@{img/{imgName}(imgName = ${image.imgName})}" th:alt="${image.imgOriginalName}">
             </div>
 
-            <div class="row justify-content-center">
-                <a class="btn btn-primary" th:href="@{/modifyPost(id=${post.id})}">Modify</a>
+            <div style="margin-bottom: 40px" class="row justify-content-center">
+                <a th:if="${user == post.writer}" style="margin-right: 20px" class="btn btn-primary" th:href="@{/modifyPost(id=${post.id})}">Modify</a>
+                <a th:if="${user == post.writer}" style="margin-right: 20px" th:href="'javascript:deletePost('+${post.id}+')'" class="btn btn-danger">DELETE</a>
+                <a class="btn btn-primary" th:href="@{/}">Go Back</a>
             </div>
+
+            <form th:action="@{/addComment(postId=${post.id})}" method="post">
+                <div class="form-group" th:object="${commentDTO}">
+                    <label>Comments</label>
+                    <textarea style="resize:none" th:field="*{content}" class="form-control"  rows="4" cols="40"/>
+                    <p class="alert alert-danger" th:if="${#fields.hasErrors('content')}"
+                       th:errors="*{content}">Can't be empty or more than 200 characters.</p>
+                    <div style="margin-top: 10px" class="text-center">
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Show comments -->
+            <table class="table" th:if="${comments != null && comments.size() > 0}">
+                <tr th:each="comment : ${comments}">
+                    <td style="border-bottom: black 1px solid">
+                        <div>
+                            <h4 style="color: #007bff" th:text="${comment.writer}"></h4>
+                            <p th:text="${comment.content}"></p>
+                            <h6 style="color: #6c757d" th:text="${#temporals.format(comment.createdDateTime, 'MM-dd-yy HH:mm')}"></h6>
+                        </div>
+                    <td>
+                        <a th:if="${user == comment.writer}" th:href="'javascript:deleteComment('+${comment.id}+')'" class="btn btn-danger">DELETE</a>
+                    </td>
+                    </td>
+                </tr>
+            </table>
 
             <div th:replace="fragments/footer :: footer" />
         </div> <!-- /container -->
     </body>
+    <script>
+        function deletePost(id) {
+            var form = document.createElement("form");
+            form.setAttribute("method", "post");
+            form.setAttribute("action", "/deletePost?postId=" + id);
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function deleteComment(id) {
+            var form = document.createElement("form");
+            form.setAttribute("method", "post");
+            form.setAttribute("action", "/deleteComment?commentId=" + id);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
 </html>

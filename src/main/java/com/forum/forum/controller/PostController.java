@@ -1,8 +1,11 @@
 package com.forum.forum.controller;
 
+import com.forum.forum.domain.Comment;
 import com.forum.forum.domain.Member;
 import com.forum.forum.domain.Post;
+import com.forum.forum.dto.CommentDTO;
 import com.forum.forum.dto.PostDTO;
+import com.forum.forum.service.CommentService;
 import com.forum.forum.service.MemberService;
 import com.forum.forum.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +33,7 @@ public class PostController {
 
     private final PostService postService;
     private final MemberService memberService;
+    private final CommentService commentService;
 
     @GetMapping("/myPosts")
     public String myPosts(Model model, Principal principal,
@@ -44,9 +48,16 @@ public class PostController {
     }
 
     @GetMapping("/viewPost")
-    public String viewPost(@RequestParam("id") Long postId, Model model) {
+    public String viewPost(@RequestParam("id") Long postId, Model model, Principal principal) {
         Post post = postService.findPostById(postId);
+        List<Comment> comments = commentService.findCommentsByPostId(postId);
+        System.out.println(comments);
+
         model.addAttribute("post", post);
+        model.addAttribute("comments", comments);
+        model.addAttribute("commentDTO", new CommentDTO());
+        model.addAttribute("user", principal.getName());
+
         return "viewPost";
     }
 
@@ -91,8 +102,10 @@ public class PostController {
 
     @PostMapping("/modifyPost")
     public String modifyPost(@RequestParam("id") Long postId, @Valid PostDTO postDTO,
-                             BindingResult result) {
+                             BindingResult result, Model model) {
         if (result.hasErrors()) {
+            Post post = postService.findPostById(postId);
+            model.addAttribute(model.addAttribute("numOfImagesForPost", post.getImages().size()));
             return "modifyPost";
         }
 
@@ -101,8 +114,8 @@ public class PostController {
         return "redirect:/viewPost?id=" + postId;
     }
 
-    @PostMapping("/deletePost/{postId}")
-    public String deletePost(@PathVariable("postId") Long postId, Principal principal) {
+    @PostMapping("/deletePost")
+    public String deletePost(@RequestParam("postId") Long postId, Principal principal) {
         Member member = memberService.findByUserName(principal.getName());
         Post post = postService.findPostById(postId);
         if (post.getMember().getId() != member.getId()) {
@@ -111,6 +124,37 @@ public class PostController {
 
         postService.deletePost(postId);
         return "redirect:/myPosts";
+    }
+
+    @PostMapping("/addComment")
+    public String addComment(@RequestParam("postId") Long postId, @Valid CommentDTO commentDTO,
+                             BindingResult result, Model model, Principal principal) {
+
+        if (result.hasErrors()) {
+            Post post = postService.findPostById(postId);
+            List<Comment> comments = commentService.findCommentsByPostId(postId);
+
+            model.addAttribute("post", post);
+            model.addAttribute("comments", comments);
+            return "viewPost";
+        }
+
+        commentDTO.setWriter(principal.getName());
+        commentService.addComment(postId, commentDTO);
+
+        return "redirect:/viewPost?id=" + postId;
+    }
+
+    @PostMapping("/deleteComment")
+    public String deleteComment(@RequestParam("commentId") Long commentId, Principal principal) {
+        Comment comment = commentService.findCommentById(commentId);
+
+        if (!comment.getWriter().equals(principal.getName())) {
+            return "home";
+        }
+
+        commentService.deleteComment(commentId);
+        return "redirect:/viewPost?id=" + comment.getPost().getId();
     }
 
 }

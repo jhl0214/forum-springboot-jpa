@@ -40,11 +40,11 @@
                     $(this).val("");
                     return;
                 }
-                // Check file size limit 20MB
+                // Check file size limit 50MB
                 var fileSize = this.files[0].size;
-                var maxSize = 1024 * 1024 * 20;
+                var maxSize = 1024 * 1024 * 50;
                 if (fileSize > maxSize) {
-                    alert("Max file size is 20MB.");
+                    alert("Max file size is 50MB.");
                     $(this).val("");
                 }
             }
