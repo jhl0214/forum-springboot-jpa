@@ -98,7 +98,7 @@ public class PostService {
     }
 
     public Page<Post> findPostsByWriter(String username, Pageable pageable) {
-        return postRepository.findByWriter(username, pageable);
+        return postRepository.findByWriterIgnoreCase(username, pageable);
     }
 
     public List<Post> findAllPosts() {
@@ -116,7 +116,7 @@ public class PostService {
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
         pageable = PageRequest.of(page, pageable.getPageSize(), pageable.getSort());
 
-        return postRepository.findByWriter(username, pageable);
+        return postRepository.findByWriterIgnoreCase(username, pageable);
     }
 
     @Transactional
@@ -191,6 +191,6 @@ public class PostService {
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
         pageable = PageRequest.of(page, pageable.getPageSize(), pageable.getSort());
 
-        return postRepository.findByTitleContaining(title, pageable);
+        return postRepository.findByTitleContainingIgnoreCase(title, pageable);
     }
 }

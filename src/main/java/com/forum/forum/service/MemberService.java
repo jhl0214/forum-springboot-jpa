@@ -30,7 +30,7 @@ public class MemberService implements UserDetailsService {
         memberDTO.setPassword(encoder.encode(memberDTO.getPassword()));
 
         return memberRepository.save(Member.builder()
-                .name(memberDTO.getName())
+                .name(memberDTO.getName().toLowerCase())
                 .username(memberDTO.getUsername())
                 .password(memberDTO.getPassword())
                 .email(memberDTO.getEmail())

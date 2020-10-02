@@ -121,7 +121,7 @@ public class PostController {
         }
 
         postService.deletePost(postId);
-        return "redirect:/myPosts";
+        return "redirect:/";
     }
 
     @PostMapping("/addComment")

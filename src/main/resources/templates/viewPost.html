@@ -23,7 +23,7 @@
                        disabled />
             </div>
 
-            <div th:if="${post.images.size() > 0}">
+            <div class="mb-5" th:if="${post.images.size() > 0}">
                 <img class="img-fluid center-block" th:each="image : ${post.images}" th:src="@{img/{imgName}(imgName = ${image.imgName})}" th:alt="${image.imgOriginalName}">
             </div>
 
@@ -48,10 +48,10 @@
             <!-- Show comments -->
             <table class="table" th:if="${comments != null && comments.size() > 0}">
                 <tr th:each="comment : ${comments}">
-                    <td style="border-bottom: black 1px solid">
+                    <td class="border-bottom">
                         <div>
                             <h4 style="color: #007bff" th:text="${comment.writer}"></h4>
-                            <p th:text="${comment.content}"></p>
+                            <p th:text="${comment.content}" class="text-break"></p>
                             <h6 style="color: #6c757d" th:text="${#temporals.format(comment.createdDateTime, 'MM-dd-yy HH:mm')}"></h6>
                         </div>
                     <td>

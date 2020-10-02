@@ -5,10 +5,9 @@
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
     <div>
-        <h1 class="mb-5 text-center" th:text="'Welcome, ' + ${user} + '!'"></h1>
+        <h1 class="mb-5 text-center" th:text="'Posts for ' + ${user} + '!'"></h1>
         <form action="/search">
             <div>
-                <h1 class="mb-5 text-center" th:text="'Welcome, ' + ${user} + '!'"></h1>
                 <div class="form-inline float-right mb-2">
                     <div class="form-group">
                         <input type="text" class="form-control" name="search" placeholder="Search" />
