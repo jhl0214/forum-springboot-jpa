@@ -49,7 +49,6 @@ public class PostController {
     public String viewPost(@RequestParam("id") Long postId, Model model, Principal principal) {
         Post post = postService.findPostById(postId);
         List<Comment> comments = commentService.findCommentsByPostId(postId);
-        System.out.println(comments);
 
         model.addAttribute("post", post);
         model.addAttribute("comments", comments);
@@ -156,16 +155,28 @@ public class PostController {
     }
 
     @GetMapping("/search")
-    public String searchPost(@RequestParam("search") String search, @RequestParam("searchBy") String searchBy,
+    public String searchPost(@RequestParam("search") String search, @RequestParam("searchBy") String searchBy, @RequestParam("curPage") String curPage,
                              @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                              Model model, Principal principal) {
 
+        model.addAttribute("user", principal.getName());
+
+        String returnPage;
+
+        if (curPage.equals("home")) {
+            returnPage = "redirect:/";
+        } else if (curPage.equals("myPosts")) {
+            returnPage = "redirect:/myPosts";
+        } else {
+            returnPage = "redirect:/admin";
+        }
+
         if (search == null || search.isBlank()) {
-            return "redirect:/";
+            return curPage;
         }
 
         if (searchBy.equals("title")) {
-            Page<Post> posts = postService.findPostsByTitle(search, pageable);
+            Page<Post> posts = curPage.equals("myPosts") ? postService.findPostsByTitleAndWriter(search, principal.getName(), pageable) : postService.findPostsByTitle(search, pageable);
             model.addAttribute("posts", posts);
             model.addAttribute("totalPages", posts.getTotalPages());
         } else if (searchBy.equals("writer")) {
@@ -176,9 +187,23 @@ public class PostController {
         }
 
         model.addAttribute("searchKeyWord", search);
-        model.addAttribute("user", principal.getName());
 
-        return "searchPosts";
+        return curPage.equals("home") ? "searchPosts" : curPage;
+    }
+
+    @GetMapping("/admin")
+    public String adminPage(Model model, Principal principal,
+                       @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+
+        Page<Post> posts = postService.getAllPostsForPage(pageable);
+        int totalPages = posts.getTotalPages();
+        String username = principal.getName();
+
+        model.addAttribute("posts", posts);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("user", username);
+
+        return "admin";
     }
 
 }

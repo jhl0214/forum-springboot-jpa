@@ -193,4 +193,11 @@ public class PostService {
 
         return postRepository.findByTitleContainingIgnoreCase(title, pageable);
     }
+
+    public Page<Post> findPostsByTitleAndWriter(String title, String writer, Pageable pageable) {
+        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+        pageable = PageRequest.of(page, pageable.getPageSize(), pageable.getSort());
+
+        return postRepository.findByTitleContainingIgnoreCaseAndWriter(title, writer, pageable);
+    }
 }

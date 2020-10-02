@@ -4,10 +4,10 @@
 <body>
     <div class="container">
         <div th:replace="fragments/bodyHeader :: bodyHeader" />
-        <h1 class="mb-5 text-center" th:text="'Welcome, ' + ${user} + '!'"></h1>
+        <h1 class="mb-5 text-center" th:text="'Admin Page'"></h1>
         <form action="/search">
             <div>
-                <input type="hidden" name="curPage" value="home" />
+                <input type="hidden" name="curPage" value="admin" />
                 <div class="form-inline float-right mb-2">
                     <div class="form-group">
                         <input type="text" class="form-control" name="search" placeholder="Search" />
@@ -39,6 +39,9 @@
                     <td><a th:href="@{/viewPost(id=${post.id})}" th:text="${post.title}"></a></td>
                     <td th:text="${post.writer}"></td>
                     <td th:text="${#temporals.format(post.createdDateTime, 'MM-dd-yy HH:mm')}"></td>
+                    <td>
+                        <a th:href="'javascript:deletePost('+${post.id}+')'" class="btn btn-danger">DELETE</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -81,4 +84,13 @@
         </div>
     </div> <!-- /container -->
 </body>
+<script>
+    function deletePost(id) {
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "/deletePost?postId=" + id);
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
 </html>

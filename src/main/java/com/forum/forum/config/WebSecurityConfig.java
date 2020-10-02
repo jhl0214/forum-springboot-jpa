@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .authorizeRequests()
                 .antMatchers("/login*", "/join").permitAll() // Everyone can access
-                .antMatchers("/list", "/writePost/**", "/modifyPost/**", "/deletePost/**", "/viewPost/**", "/addComment", "/deleteComment", "/myPosts", "/").hasRole("USER") // Only user and admin
+                .antMatchers("/list", "/writePost/**", "/modifyPost/**", "/deletePost/**", "/viewPost/**", "/addComment", "/deleteComment", "/myPosts", "/").hasAnyRole("ADMIN", "USER") // Only user and admin
                 .antMatchers("/admin").hasRole("ADMIN") // Only admin
                 .anyRequest().authenticated()
             .and()

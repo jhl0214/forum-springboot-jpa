@@ -28,10 +28,9 @@ public class MemberService implements UserDetailsService {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         memberDTO.setPassword(encoder.encode(memberDTO.getPassword()));
-
         return memberRepository.save(Member.builder()
-                .name(memberDTO.getName().toLowerCase())
-                .username(memberDTO.getUsername())
+                .name(memberDTO.getName())
+                .username(memberDTO.getUsername().toLowerCase())
                 .password(memberDTO.getPassword())
                 .email(memberDTO.getEmail())
                 .auth(memberDTO.getAuth()).build());

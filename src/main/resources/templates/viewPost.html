@@ -48,7 +48,7 @@
             <!-- Show comments -->
             <table class="table" th:if="${comments != null && comments.size() > 0}">
                 <tr th:each="comment : ${comments}">
-                    <td class="border-bottom">
+                    <td class="w-100 border-bottom">
                         <div>
                             <h4 style="color: #007bff" th:text="${comment.writer}"></h4>
                             <p th:text="${comment.content}" class="text-break"></p>

@@ -29,14 +29,14 @@ public class MemberRepository {
     }
 
     public Member findByUserName(String username) {
-        List<Member> members = em.createQuery("select m From Member m where m.username  = :username", Member.class)
+        List<Member> members = em.createQuery("select m From Member m where lower(m.username)  = :username", Member.class)
                 .setParameter("username", username.toLowerCase())
                 .getResultList();
         return members.size() == 0 ? null : members.get(0);
     }
 
     public Member findByUserNameAndPassword(String username, String password) {
-        List<Member> members =  em.createQuery("select m From Member m where m.username  = :username and m.password = :password", Member.class)
+        List<Member> members =  em.createQuery("select m From Member m where lower(m.username)  = :username and m.password = :password", Member.class)
                 .setParameter("username", username.toLowerCase())
                 .setParameter("password", password)
                 .getResultList();
