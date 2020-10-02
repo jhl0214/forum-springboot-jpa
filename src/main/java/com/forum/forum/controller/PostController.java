@@ -160,6 +160,8 @@ public class PostController {
                              Model model, Principal principal) {
 
         model.addAttribute("user", principal.getName());
+        model.addAttribute("searchKeyWord", search);
+        model.addAttribute("searchBy", searchBy);
 
         String returnPage;
 
@@ -172,7 +174,7 @@ public class PostController {
         }
 
         if (search == null || search.isBlank()) {
-            return curPage;
+            return returnPage;
         }
 
         if (searchBy.equals("title")) {
@@ -183,12 +185,11 @@ public class PostController {
             Page<Post> posts = postService.findPostsByWriter(search, pageable);
             model.addAttribute("posts", posts);
             model.addAttribute("totalPages", posts.getTotalPages());
-
         }
 
         model.addAttribute("searchKeyWord", search);
 
-        return curPage.equals("home") ? "searchPosts" : curPage;
+        return curPage;
     }
 
     @GetMapping("/admin")

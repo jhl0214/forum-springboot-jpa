@@ -98,7 +98,7 @@ public class PostService {
     }
 
     public Page<Post> findPostsByWriter(String username, Pageable pageable) {
-        return postRepository.findByWriterIgnoreCase(username, pageable);
+        return postRepository.findByWriterContainingIgnoreCase(username, pageable);
     }
 
     public List<Post> findAllPosts() {
@@ -116,7 +116,7 @@ public class PostService {
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
         pageable = PageRequest.of(page, pageable.getPageSize(), pageable.getSort());
 
-        return postRepository.findByWriterIgnoreCase(username, pageable);
+        return postRepository.findByWriterContainingIgnoreCase(username, pageable);
     }
 
     @Transactional

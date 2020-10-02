@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    Page<Post> findByWriterIgnoreCase(String username, Pageable pageable);
+    Page<Post> findByWriterContainingIgnoreCase(String username, Pageable pageable);
 
     Page<Post> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 

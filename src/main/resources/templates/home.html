@@ -4,18 +4,19 @@
 <body>
     <div class="container">
         <div th:replace="fragments/bodyHeader :: bodyHeader" />
-        <h1 class="mb-5 text-center" th:text="'Welcome, ' + ${user} + '!'"></h1>
+        <h6 class="float-right mt-n4 mb-3" th:text="'Logged in user: ' + ${user}"></h6>
+        <h1 class="mt-5 mb-5 text-center" th:text="'Home'"></h1>
         <form action="/search">
             <div>
                 <input type="hidden" name="curPage" value="home" />
                 <div class="form-inline float-right mb-2">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="search" placeholder="Search" />
+                        <input type="text" th:value="${searchKeyWord}" class="form-control" name="search" placeholder="Search" />
                     </div>
                     <div class="form-group">
                         <select class="form-control" name="searchBy">
-                            <option value="title">Title</option>
-                            <option value="writer">Writer</option>
+                            <option value="title" th:selected="${searchBy == 'title'}">Title</option>
+                            <option value="writer" th:selected="${searchBy == 'writer'}">Writer</option>
                         </select>
                     </div>
                     <div class="form-group">
