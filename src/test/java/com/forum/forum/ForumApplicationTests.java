@@ -63,34 +63,34 @@ class ForumApplicationTests {
 
 	}
 
-	@Test
-	public void testPostRepo() {
-		Member member = new Member("name", "username", "pw", "email", "ROLE_USER");
-		Post post = new Post("title", "a", "b", LocalDateTime.now(), LocalDateTime.now());
-		member.addPost(post);
-
-		memRepo.save(member);
-		postRepo.save(post);
-
-		em.flush();
-
-		// Find a post by post id
-		Post byId = postRepo.findById(post.getId()).get();
-
-		// Check if post is added
-		assertEquals(post, byId);
-
-		// Find a post by username
-		List<Post> test = postRepo.findByUserName("username");
-		assertEquals(1, test.size());
-
-		em.remove(byId);
-		byId = postRepo.findById(post.getId()).orElse(null);
-
-		// Check if post is removed
-		assertEquals(null, byId);
-
-	}
+//	@Test
+//	public void testPostRepo() {
+//		Member member = new Member("name", "username", "pw", "email", "ROLE_USER");
+//		Post post = new Post("title", "a", "b", LocalDateTime.now(), LocalDateTime.now());
+//		member.addPost(post);
+//
+//		memRepo.save(member);
+//		postRepo.save(post);
+//
+//		em.flush();
+//
+//		// Find a post by post id
+//		Post byId = postRepo.findById(post.getId()).get();
+//
+//		// Check if post is added
+//		assertEquals(post, byId);
+//
+//		// Find a post by username
+//		List<Post> test = postRepo.findByUserName("username");
+//		assertEquals(1, test.size());
+//
+//		em.remove(byId);
+//		byId = postRepo.findById(post.getId()).orElse(null);
+//
+//		// Check if post is removed
+//		assertEquals(null, byId);
+//
+//	}
 
 //	@Test
 //	public void testImgRepo() {

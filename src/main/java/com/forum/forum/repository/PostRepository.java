@@ -11,9 +11,8 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    @Query("select p From Post p where p.member.username  = ?1")
-    List<Post> findByUserName(String username);
+    Page<Post> findByWriter(String username, Pageable pageable);
 
-    Page<Post> findByMemberUsername(String username, Pageable pageable);
+    Page<Post> findByTitleContaining(String title, Pageable pageable);
 
 }

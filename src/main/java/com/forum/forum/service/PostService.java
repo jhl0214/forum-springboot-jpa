@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -95,8 +97,8 @@ public class PostService {
         return postRepository.findById(postId).get();
     }
 
-    public List<Post> findPostsByUserName(String username) {
-        return postRepository.findByUserName(username);
+    public Page<Post> findPostsByWriter(String username, Pageable pageable) {
+        return postRepository.findByWriter(username, pageable);
     }
 
     public List<Post> findAllPosts() {
@@ -114,7 +116,7 @@ public class PostService {
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
         pageable = PageRequest.of(page, pageable.getPageSize(), pageable.getSort());
 
-        return postRepository.findByMemberUsername(username, pageable);
+        return postRepository.findByWriter(username, pageable);
     }
 
     @Transactional
@@ -183,5 +185,12 @@ public class PostService {
                 log.info("ERROR WHILE DELETING " + image.getImgName());
             }
         }
+    }
+
+    public Page<Post> findPostsByTitle(String title, Pageable pageable) {
+        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+        pageable = PageRequest.of(page, pageable.getPageSize(), pageable.getSort());
+
+        return postRepository.findByTitleContaining(title, pageable);
     }
 }
